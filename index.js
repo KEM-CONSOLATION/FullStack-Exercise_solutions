@@ -33,16 +33,25 @@ app.get('/api/persons', (request, response) => {
 })
 
 //  Fetching a single phoneBook
-app.get('/api/persons/:id', (request, response) => {
-    const id = Number(request.params.id)
-    const phoneContact = phoneBook.find(phoneContact => phoneContact.id === id)
-    if (phoneContact) {    
-        response.json(phoneContact)  
-    } else {    
-        response.status(404).end()  
-    }
-})
+// app.get('/api/persons/:id', (request, response) => {
+//     const id = Number(request.params.id)
+//     const phoneContact = phoneBook.find(phoneContact => phoneContact.id === id)
+//     if (phoneContact) {    
+//         response.json(phoneContact)  
+//     } else {    
+//         response.status(404).end()  
+//     }
+// })
 
+
+// Deleting Resources
+app.delete('/api/persons/:id', (request, response)=>{
+    const id = Number(request.params.id)
+    phoneBook = phoneBook.filter(phoneContact => phoneContact.id !== id)
+
+    response.status(405).end()
+    console.log(phoneBook);
+})
 
 const PORT = 3001
 app.listen(PORT, () => {

@@ -2,6 +2,8 @@ const { request, response } = require('express')
 const express = require('express')
 const app = express()
 
+app.use(express.json())
+
 let phoneBook = 
 [
     { 
@@ -51,6 +53,13 @@ app.delete('/api/persons/:id', (request, response)=>{
 
     response.status(405).end()
     console.log(phoneBook);
+})
+
+// Adding new requests
+app.post('/api/persons', (request, response) => {  
+    const phoneBook = request.body  
+    console.log(phoneBook)  
+    response.json(phoneBook)
 })
 
 const PORT = 3001

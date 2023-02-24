@@ -27,10 +27,20 @@ let phoneBook =
 ]
 
 
+// Fetching all PhoneBook
 app.get('/api/persons', (request, response) => {
-    // const id = (request.params.id)
-    // notes = notes.find()
     response.json(phoneBook)
+})
+
+//  Fetching a single phoneBook
+app.get('/api/persons/:id', (request, response) => {
+    const id = Number(request.params.id)
+    const phoneContact = phoneBook.find(phoneContact => phoneContact.id === id)
+    if (phoneContact) {    
+        response.json(phoneContact)  
+    } else {    
+        response.status(404).end()  
+    }
 })
 
 

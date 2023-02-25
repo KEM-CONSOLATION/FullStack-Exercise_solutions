@@ -62,6 +62,38 @@ app.post('/api/persons', (request, response) => {
     response.json(phoneBook)
 })
 
+
+
+// Generating IDs
+const generateId = () => {
+    const maxId = phoneBook.length > 0
+      ? Math.max(...phoneBook.map(n => n.id))
+      : 0
+    return maxId + 1
+  }
+  
+  app.post('/api/phoneBook', (request, response) => {
+    const body = request.body
+  
+    if (!body.content) {
+      return response.status(400).json({ 
+        error: 'content missing' 
+      })
+    }
+  
+    const phoneContact = {
+      content: body.content,
+      important: body.important || false,
+      id: generateId(),
+    }
+  
+    phoneBook = phoneBook.concat(phoneContact)
+  
+    response.json(phoneContact)
+  })
+
+
+
 const PORT = 3001
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`)

@@ -66,20 +66,32 @@ app.post('/api/persons', (request, response) => {
 
 // Generating IDs
 const generateId = () => {
-    const maxId = phoneBook.length > 0
-      ? Math.max(...phoneBook.map(n => n.id))
+    const randId = phoneBook.length > 0
+      ? Math.random(...phoneBook.map(n => n.id))
       : 0
-    return maxId + 1
+    return randId
   }
   
   app.post('/api/phoneBook', (request, response) => {
     const body = request.body
   
-    if (!body.content) {
+    if (!body.name) {
       return response.status(400).json({ 
-        error: 'content missing' 
+        error: 'name is missing' 
       })
     }
+
+    if (!body.number) {
+        return response.status(400).json({ 
+          error: 'number is missing' 
+        })
+      }
+
+    if (body.name === phoneBook.name) {
+        return response.status(400).json({ 
+          error: 'name already exists in phonebook' 
+        })
+      }
   
     const phoneContact = {
       content: body.content,

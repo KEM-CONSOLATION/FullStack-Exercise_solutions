@@ -1,14 +1,24 @@
 const { request, response } = require('express')
 const express = require('express')
+const morgan = require('morgan')
+const dotenv=require('dotenv')
+
 const app = express()
 
-app.use(express.json())
+app.use(express.json({limit:"10mb"}))
+app.use(express.urlencoded({extended:true, limit:"10kb"}))
+dotenv.config()
+// adding morgan to the code
+if (process.env.NODE_ENV === "Development"){
+    app.use(morgan('dev'))
+}
+
 
 let phoneBook = 
 [
     { 
       id: 1,
-      name: "Arto Hellas", 
+      name: "Arto Hellas",
       number: "040-123456"
     },
     { 
@@ -23,27 +33,26 @@ let phoneBook =
     },
     { 
       id: 4,
-      "name": "Mary Poppendieck", 
-      "number": "39-23-6423122"
+      name: "Mary Poppendieck", 
+      number: "39-23-6423122"
     }
 ]
-
-
+ 
 // Fetching all PhoneBook
-app.get('/api/persons', (request, response) => {
+app.get('/api/persons' ,(request, response) => {
     response.json(phoneBook)
 })
 
 //  Fetching a single phoneBook
-// app.get('/api/persons/:id', (request, response) => {
-//     const id = Number(request.params.id)
-//     const phoneContact = phoneBook.find(phoneContact => phoneContact.id === id)
-//     if (phoneContact) {    
-//         response.json(phoneContact)  
-//     } else {    
-//         response.status(404).end()  
-//     }
-// })
+app.get('/api/persons/:id', (request, response) => {
+    const id = Number(request.params.id)
+    const phoneContact = phoneBook.find(phoneContact => phoneContact.id === id)
+    if (phoneContact) {    
+        response.json(phoneContact)  
+    } else {    
+        response.status(404).end()  
+    }
+})
 
 
 // Deleting Resources
@@ -56,7 +65,7 @@ app.delete('/api/persons/:id', (request, response)=>{
 })
 
 // Adding new requests
-app.post('/api/persons', (request, response) => {  
+app.post('/api/persons',  (request, response) => {  
     const phoneBook = request.body  
     console.log(phoneBook)  
     response.json(phoneBook)
@@ -77,19 +86,17 @@ const generateId = () => {
   
     if (!body.name) {
       return response.status(400).json({ 
-        error: 'name is missing' 
+        error: "name is missing" 
       })
     }
-
     if (!body.number) {
         return response.status(400).json({ 
-          error: 'number is missing' 
+          error: "number is missing"
         })
       }
-
     if (body.name === phoneBook.name) {
         return response.status(400).json({ 
-          error: 'name already exists in phonebook' 
+          error: "name already exists in phonebook"
         })
       }
   
@@ -103,7 +110,7 @@ const generateId = () => {
     phoneBook = phoneBook.concat(phoneContact)
   
     response.json(phoneContact)
-  })
+})
 
 
 

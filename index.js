@@ -84,6 +84,7 @@ const generateId = () => {
     const phoneContact = {
       content: body.content,
       important: body.important || false,
+      date: new Date(),
       id: generateId(),
     }
   
